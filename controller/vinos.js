@@ -42,6 +42,11 @@ class Controlador{
             .then(() => res.status(200).send('Correo enviado'))
             .catch(error => res.status(500).send(error));
     }
+    /*
+    enviarCorreo = (req, res) => {
+        const {email} = req.body;
+        servicio.enviarCorreo(email);
+    */
 }
 
 export default Controlador;
