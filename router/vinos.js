@@ -1,7 +1,7 @@
-import express, { Router } from 'express';
+import express from 'express';
 import controlador from '../controller/vinos.js'
 
-class router{
+class VinosRouter{
     router = null
     constructor(){
         this.router = express.Router();
@@ -14,7 +14,8 @@ class router{
         this.router.post('/', this.controlador.guardarVino);
         this.router.put('/:id', this.controlador.editarVino);
         this.router.delete('/:id', this.controlador.eliminarVino);
+        return this.router;
     }
 }
 
-export default Router;
+export default VinosRouter;

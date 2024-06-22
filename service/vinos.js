@@ -1,4 +1,4 @@
-import modelo from '../model/vinos.js'
+import Modelo from '../model/vinos.js'
 
 class Servicio{
     modelo = null;
@@ -21,7 +21,7 @@ class Servicio{
     }
 
     editarVino = async (id, vino) => {
-        const vinoActualizado = await this.modelo.editarVIno(id, vino);
+        const vinoActualizado = await this.modelo.editarVino(id, vino);
         return vinoActualizado;
     }
 
