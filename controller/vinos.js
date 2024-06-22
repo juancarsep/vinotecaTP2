@@ -35,6 +35,13 @@ class Controlador{
         const vinoEliminado = await this.servicio.eliminarVino(id);
         res.json(vinoEliminado);
     }
+
+    enviarCorreo = (req, res) => {
+        const {email} = req.body;
+        this.servicio.enviarCorreo(email)
+            .then(() => res.status(200).send('Correo enviado'))
+            .catch(error => res.status(500).send(error));
+    }
 }
 
 export default Controlador;

@@ -1,4 +1,5 @@
 import Modelo from '../model/vinos.js'
+import transporter from '../config/mailers.js'
 
 class Servicio{
     modelo = null;
@@ -30,6 +31,16 @@ class Servicio{
         await this.modelo.eliminarVino(id);
         return vinoEliminado;
     }
+
+    enviarCorreo = async mail => {
+        await transporter.sendMail({
+            from: '"Hora de tomar 🍷" <tpvinoteca@gmail.com>',
+            to: mail,
+            subject: "Hello ✔",
+            html: "<b>Hello world?</b>",
+        });
+    }
+
 }
 
 export default Servicio;

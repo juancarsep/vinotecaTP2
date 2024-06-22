@@ -14,6 +14,7 @@ class VinosRouter{
         this.router.post('/', this.controlador.guardarVino);
         this.router.put('/:id', this.controlador.editarVino);
         this.router.delete('/:id', this.controlador.eliminarVino);
+        this.router.post('/email', this.controlador.enviarCorreo);
         return this.router;
     }
 }

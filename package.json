@@ -1,5 +1,5 @@
 {
-  "type" : "module",
+  "type": "module",
   "name": "vinotecatp2",
   "version": "1.0.0",
   "main": "server.js",
@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14"
   }
 }
