@@ -37,8 +37,8 @@ class Controlador{
     }
 
     enviarCorreo = (req, res) => {
-        const {email} = req.body;
-        this.servicio.enviarCorreo(email)
+        const {mail} = req.body;
+        this.servicio.enviarCorreo(mail)
             .then(() => res.status(200).send('Correo enviado'))
             .catch(error => res.status(500).send(error));
     }
