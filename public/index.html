@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tragos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-inline: 20px;
+        }
+        .container {
+            display: flex;
+            width: 80%;
+        }
+        .forms {
+            width: 50%;
+            padding-right: 20px;
+        }
+        .result {
+            width: 50%;
+            padding-left: 20px;
+            border-left: 1px solid #ccc;
+        }
+        form {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        form div label {
+            margin-bottom: 5px;
+            display: block;
+        }
+        form div input, form div textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="height: 90vh; overflow: hidden;">
+    <div class="container">
+        <div class="forms" style="height: 100vh; overflow-y: auto;">
+            <h1>Gestión de Tragos</h1>
+
+            <!-- Formulario para obtener todos los tragos -->
+            <form id="obtenerTragosForm">
+                <button type="button" onclick="obtenerTragos()">Obtener Todos los Tragos</button>
+            </form>
+
+            <!-- Formulario para obtener un trago por ID -->
+            <form id="obtenerTragoForm">
+                <div>
+                    <label for="tragoId">ID del Trago:</label>
+                    <input type="text" id="tragoId">
+                </div>
+                <button type="button" onclick="obtenerTrago()">Obtener Trago</button>
+            </form>
+
+            <!-- Formulario para guardar un nuevo trago -->
+            <form id="guardarTragoForm">
+                <div>
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre">
+                </div>
+                <div>
+                    <label for="precio">Precio:</label>
+                    <input type="number" id="precio" step="0.01">
+                </div>
+                <button type="button" onclick="guardarTrago()">Guardar Trago</button>
+            </form>
+
+            <!-- Formulario para editar un trago -->
+            <form id="editarTragoForm">
+                <div>
+                    <label for="editarId">ID del Trago:</label>
+                    <input type="text" id="editarId">
+                </div>
+                <div>
+                    <label for="editarNombre">Nuevo Nombre:</label>
+                    <input type="text" id="editarNombre">
+                </div>
+                <div>
+                    <label for="editarPrecio">Nuevo Precio:</label>
+                    <input type="number" id="editarPrecio" step="0.01">
+                </div>
+                <button type="button" onclick="editarTrago()">Editar Trago</button>
+            </form>
+
+            <!-- Formulario para eliminar un trago -->
+            <form id="eliminarTragoForm">
+                <div>
+                    <label for="eliminarId">ID del Trago:</label>
+                    <input type="text" id="eliminarId">
+                </div>
+                <button type="button" onclick="eliminarTrago()">Eliminar Trago</button>
+            </form>
+
+            <!-- Formulario para enviar correo -->
+            <form id="enviarCorreoForm">
+                <div>
+                    <label for="correo">Correo:</label>
+                    <input type="email" id="mail">
+                </div>
+                <button type="button" onclick="enviarCorreo()">Enviar Correo</button>
+            </form>
+            
+            <form id="descargarMenuForm">
+                <button type="button" onclick="descargarTragos()">Descargar carta de tragos</button>
+            </form>
+        </div>
+
+        <div class="result">
+            <h2>Resultado</h2>
+            <pre id="resultado"></pre>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:8080';
+
+        async function obtenerTragos() {
+            try {
+                const response = await fetch(`${baseUrl}/tragos`);
+                const data = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function obtenerTrago() {
+            const id = document.getElementById('tragoId').value;
+            try {
+                const response = await fetch(`${baseUrl}/tragos/${id}`);
+                const data = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function guardarTrago() {
+            const nombre = document.getElementById('nombre').value;
+            const precio = parseFloat(document.getElementById('precio').value);
+            try {
+                const response = await fetch(`${baseUrl}/tragos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, precio })
+                });
+                const data = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function editarTrago() {
+            const id = document.getElementById('editarId').value;
+            const nombre = document.getElementById('editarNombre').value;
+            const precio = parseFloat(document.getElementById('editarPrecio').value);
+            try {
+                const response = await fetch(`${baseUrl}/tragos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, precio })
+                });
+                const data = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function eliminarTrago() {
+            const id = document.getElementById('eliminarId').value;
+            try {
+                const response = await fetch(`${baseUrl}/tragos/${id}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                document.getElementById('resultado').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function enviarCorreo() {        
+          try {
+            const mail = document.getElementById('mail').value;
+            if (mail) {
+              const response = await fetch(`${baseUrl}/tragos/email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mail })
+              });
+              if (!response.ok) {
+                  throw new Error(`Error en la solicitud: ${response.status}`);
+              }
+              const data = await response.json();
+              document.getElementById('resultado').innerText = 'Correo enviado';
+            } else {
+              document.getElementById('resultado').innerText = 'Ingrese un correo valido';
+            }
+          } catch (error) {
+            console.error('Hubo un problema con la operación de fetch:', error);
+            document.getElementById('resultado').innerText = 'Error al enviar el correo';
+          }
+        }
+
+        async function descargarTragos() {
+          try {
+            const response = await fetch(`${baseUrl}/tragos/carta`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/pdf' },
+              });
+
+            if (response.status === 200) {
+                const blob = await response.blob();
+                console.log(blob)
+                if (blob.size > 2) {
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'carta_tragos.pdf';
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  document.getElementById('resultado').innerText = 'Carta descargada correctamente';
+                }
+              } else {
+                document.getElementById('resultado').innerText = 'Error al descargar el PDF';
+            }
+          } catch (error) {
+            console.error('Hubo un problema con la operación de fetch:', error);
+            document.getElementById('resultado').innerText = 'Error al descargar el PDF';
+          }
+        }
+    </script>
+</body>
+</html>
