@@ -11,9 +11,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.19.2",
     "nodemailer": "^6.9.14"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }

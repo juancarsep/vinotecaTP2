@@ -34,10 +34,9 @@ class Servicio{
 
     enviarCorreo = async mail => {
         await transporter.sendMail({
-            from: '"Hora de tomar 🍷" <tptragoteca@gmail.com>',
-            to: mail,
-            subject: "Hello ✔",
-            html: "<b>Hello world?</b>",
+            from: '"Tragoteca TP2🍷" <tptragoteca@gmail.com>',
+            to: mail,            
+            html: "<b>Hora de tomar!</b>",
         });
     }
 
