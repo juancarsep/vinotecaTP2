@@ -1,5 +1,6 @@
 import Modelo from '../model/tragos.js'
 import transporter from '../config/mailers.js'
+import PDFDocument from 'pdfkit';
 
 
 class Servicio{
@@ -46,6 +47,27 @@ class Servicio{
         subject: "Carta de tragos",
         html: html,
       });
+    }
+
+    descargarMenu = async (req, res) => {
+      const doc = new PDFDocument();
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="simple_report.pdf"');
+
+      doc.pipe(res);
+
+      const tragos = await this.obtenerTragos();
+      
+      doc.fontSize(25).text('Carta de tragos', { align: 'center' });
+      
+      tragos.forEach(cocktail => {
+        doc.fontSize(18).text(`Nombre: ${cocktail.nombre}`);
+        doc.fontSize(16).text(`Precio: $${cocktail.precio.toFixed(2)}`);
+        doc.moveDown();
+      });
+
+      doc.end();
     }
 
 
