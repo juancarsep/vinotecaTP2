@@ -11,10 +11,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
+    "blob-stream": "^0.1.3",
     "express": "^4.19.2",
-    "nodemailer": "^6.9.14"
-  },
-  "devDependencies": {},
-  "description": ""
+    "nodemailer": "^6.9.14",
+    "pdfkit": "^0.15.0"
+  }
 }

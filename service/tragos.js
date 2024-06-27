@@ -1,5 +1,7 @@
 import Modelo from '../model/tragos.js'
 import transporter from '../config/mailers.js'
+import PDFDocument from 'pdfkit';
+
 
 class Servicio{
     modelo = null;
@@ -33,12 +35,41 @@ class Servicio{
     }
 
     enviarCorreo = async mail => {
-        await transporter.sendMail({
-            from: '"Tragoteca TP2🍷" <tptragoteca@gmail.com>',
-            to: mail,            
-            html: "<b>Hora de tomar!</b>",
-        });
+      const tragos = await this.modelo.obtenerTragos();
+      let html = "<b>Carta de tragos:</b><br><ul>";
+      tragos.forEach(trago => {
+        html += `<li>${trago.nombre} - ${trago.precio.toFixed(2)}</li>`;
+      });
+      html += "</ul>";
+      await transporter.sendMail({
+        from: '"Hora de tomar 🍷" <tptragoteca@gmail.com>',
+        to: mail,
+        subject: "Carta de tragos",
+        html: html,
+      });
     }
+
+    descargarMenu = async (req, res) => {
+      const doc = new PDFDocument();
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="simple_report.pdf"');
+
+      doc.pipe(res);
+
+      const tragos = await this.obtenerTragos();
+      
+      doc.fontSize(25).text('Carta de tragos', { align: 'center' });
+      
+      tragos.forEach(cocktail => {
+        doc.fontSize(18).text(`Nombre: ${cocktail.nombre}`);
+        doc.fontSize(16).text(`Precio: $${cocktail.precio.toFixed(2)}`);
+        doc.moveDown();
+      });
+
+      doc.end();
+    }
+
 
 }
 

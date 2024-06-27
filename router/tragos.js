@@ -11,6 +11,7 @@ class TragosRouter{
     start(){
         this.router.get('/', this.controlador.obtenerTragos);
         this.router.get('/:id', this.controlador.obtenerTrago);
+        this.router.put('/carta', this.controlador.descargarMenu);
         this.router.post('/', this.controlador.guardarTrago);
         this.router.put('/:id', this.controlador.editarTrago);
         this.router.delete('/:id', this.controlador.eliminarTrago);

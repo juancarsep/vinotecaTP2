@@ -1,5 +1,6 @@
 import servicio from '../service/tragos.js';
 
+
 class Controlador{
     constructor(){
         this.servicio = new servicio();
@@ -37,10 +38,14 @@ class Controlador{
     }
 
     enviarCorreo = (req, res) => {
-        const {mail} = req.body;
-        this.servicio.enviarCorreo(mail)
-            .then(() => res.status(200).send('Correo enviado'))
-            .catch(error => res.status(500).send(error));
+      const {mail} = req.body;
+      this.servicio.enviarCorreo(mail)
+        .then(() => res.status(200).send({response: 'Correo enviado'}))
+        .catch(error => res.status(500).send(error));
+    }
+      
+    descargarMenu = async (req, res) => {
+      await this.servicio.descargarMenu(req, res);
     }
     /*
     enviarCorreo = (req, res) => {

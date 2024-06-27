@@ -1,27 +1,29 @@
+//Los metodos de la capa de persistencia deben ser asincronicos
+
 class Modelo {
 
     tragos = [];
 
     constructor() {
         this.tragos = [
-            { id: "1", nombre: "Old Fashioned", precio: 12342.43 },
-            { id: "2", nombre: "Negroni", precio: 1233.43 },
-            { id: "3", nombre: "Manhattan", precio: 1235.43 },
-            { id: "4", nombre: "Daiquiri", precio: 1236.43 },
-            { id: "5", nombre: "Margarita", precio: 123.43 },
-            { id: "6", nombre: "Mojito", precio: 1223.43 },
+            { id: "1", nombre: "Old Fashioned", precio: 2500.50 },
+            { id: "2", nombre: "Negroni", precio: 3100.25 },
+            { id: "3", nombre: "Manhattan", precio: 3050.00 },
+            { id: "4", nombre: "Daiquiri", precio: 2150.25 },
+            { id: "5", nombre: "Margarita", precio: 1700.45 },
+            { id: "6", nombre: "Mojito", precio: 2700.50 },
         ]
     }
 
     obtenerTragos = () => this.tragos;
 
-    obtenerTrago = id => {
-        const trago = this.tragos.find(trago => trago.id === id);
+    obtenerTrago = async id => {
+        const trago = await this.tragos.find(trago => trago.id === id);
         return trago || {};
     }
 
     guardarTrago = trago => {
-        const id = String(parseInt(this.tragos[this.tragos.length - 1]?.id || 0) + 1);
+        const id =  String(parseInt(this.tragos[this.tragos.length - 1]?.id || 0) + 1);
         const tragoConId = { id, ...trago };
         this.tragos.push(tragoConId);
         return tragoConId;

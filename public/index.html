@@ -10,7 +10,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 20px;
+            padding-inline: 20px;
         }
         .container {
             display: flex;
@@ -51,9 +51,9 @@
         }
     </style>
 </head>
-<body>
+<body style="height: 90vh; overflow: hidden;">
     <div class="container">
-        <div class="forms">
+        <div class="forms" style="height: 100vh; overflow-y: auto;">
             <h1>Gestión de Tragos</h1>
 
             <!-- Formulario para obtener todos los tragos -->
@@ -116,6 +116,10 @@
                     <input type="email" id="mail">
                 </div>
                 <button type="button" onclick="enviarCorreo()">Enviar Correo</button>
+            </form>
+            
+            <form id="descargarMenuForm">
+                <button type="button" onclick="descargarTragos()">Descargar carta de tragos</button>
             </form>
         </div>
 
@@ -196,23 +200,56 @@
         }
 
         async function enviarCorreo() {        
-        try {
-        const mail = document.getElementById('mail').value;
-        const response = await fetch(`${baseUrl}/tragos/email`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mail })
-        });
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status}`);
+          try {
+            const mail = document.getElementById('mail').value;
+            if (mail) {
+              const response = await fetch(`${baseUrl}/tragos/email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mail })
+              });
+              if (!response.ok) {
+                  throw new Error(`Error en la solicitud: ${response.status}`);
+              }
+              const data = await response.json();
+              document.getElementById('resultado').innerText = 'Correo enviado';
+            } else {
+              document.getElementById('resultado').innerText = 'Ingrese un correo valido';
+            }
+          } catch (error) {
+            console.error('Hubo un problema con la operación de fetch:', error);
+            document.getElementById('resultado').innerText = 'Error al enviar el correo';
+          }
         }
-        const data = await response.json();
-        document.getElementById('resultado').innerText = 'Correo enviado';
-         } catch (error) {
-        console.error('Hubo un problema con la operación de fetch:', error);
-        document.getElementById('resultado').innerText = 'Error al enviar el correo';
+
+        async function descargarTragos() {
+          try {
+            const response = await fetch(`${baseUrl}/tragos/carta`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/pdf' },
+              });
+
+            if (response.status === 200) {
+                const blob = await response.blob();
+                console.log(blob)
+                if (blob.size > 2) {
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'carta_tragos.pdf';
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  document.getElementById('resultado').innerText = 'Carta descargada correctamente';
+                }
+              } else {
+                document.getElementById('resultado').innerText = 'Error al descargar el PDF';
+            }
+          } catch (error) {
+            console.error('Hubo un problema con la operación de fetch:', error);
+            document.getElementById('resultado').innerText = 'Error al descargar el PDF';
+          }
         }
-}
     </script>
 </body>
 </html>
